@@ -1,3 +1,7 @@
+# Assign value to variable
+student_count = 11
+
+# Print list of students, each name on a new line.
 puts "The Students of Villians Academy"
 puts "--------------------"
 puts "Dr. Hannibal Lecter"
@@ -13,6 +17,4 @@ puts "Jofferey Baratheon"
 puts "Norman Bates"
 
 # Prints student count to new line.
-print "Overall, we have "
-print 11
-puts " great students"
+print "Overall, we have #{student_count} great students"
