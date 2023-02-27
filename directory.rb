@@ -13,13 +13,28 @@ student_list = [
   "Norman Bates",
 ]
 
-# Print header and line at the top of the list.
+def print_header
+  # Print header and line at the top of the list.
 puts "The Students of Villians Academy\n----------------------------"
+end
 
-# prints each name in student list array to new line.
-student_list.each { |student|
-  puts(student)
+def print_list(items)
+  # prints each name in student list array to new line.
+  items.each { |item|
+  puts(item)
 }
+end
 
-# Prints student count to new line.
-print "Overall, we have #{student_list.length} great students\n"
+def print_footer(items)
+  # Prints footer text with array length.
+  print "Overall, we have #{items.length} great students\n"
+end
+
+# runs print_header and prints header text
+print_header
+
+# runs print list method to print each item in the array that's input
+print_list(student_list)
+
+# runs print footer and prints footer text
+print_footer(student_list)
