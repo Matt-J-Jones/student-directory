@@ -1,16 +1,16 @@
 # Assign students to array
 student_list = [
-  "Dr. Hannibal Lecter",
-  "Darth Vader",
-  "Nurse Rached",
-  "Michael Corleone",
-  "Alex DeLarge",
-  "The Wicked Witch of the West",
-  "Terminator",
-  "Freddy Krueger",
-  "The Joker",
-  "Jofferey Baratheon",
-  "Norman Bates",
+  {name: "Dr. Hannibal Lecter", cohort: :november},
+  {name: "Darth Vader", cohort: :november},
+  {name: "Nurse Rached", cohort: :november},
+  {name: "Michael Corleone", cohort: :november},
+  {name: "Alex DeLarge", cohort: :november},
+  {name: "The Wicked Witch of the West", cohort: :november},
+  {name: "Terminator", cohort: :november},
+  {name: "Freddy Krueger", cohort: :november},
+  {name: "The Joker", cohort: :november},
+  {name: "Jofferey Baratheon", cohort: :november},
+  {name: "Norman Bates", cohort: :november}
 ]
 
 def print_header
@@ -19,9 +19,9 @@ puts "The Students of Villians Academy\n----------------------------"
 end
 
 def print_list(items)
-  # prints each name in student list array to new line.
+  # prints each name and cohort in student list array to new line.
   items.each { |item|
-  puts(item)
+  puts("#{item[:name]} (#{item[:cohort]} cohort)")
 }
 end
 
