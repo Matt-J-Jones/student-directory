@@ -1,75 +1,117 @@
-# Assign students to array
-# student_list = [
-#   {name: "Dr. Hannibal Lecter", cohort: :november},
-#   {name: "Darth Vader", cohort: :november},
-#   {name: "Nurse Rached", cohort: :november},
-#   {name: "Michael Corleone", cohort: :november},
-#   {name: "Alex DeLarge", cohort: :november},
-#   {name: "The Wicked Witch of the West", cohort: :november},
-#   {name: "Terminator", cohort: :november},
-#   {name: "Freddy Krueger", cohort: :november},
-#   {name: "The Joker", cohort: :november},
-#   {name: "Jofferey Baratheon", cohort: :november},
-#   {name: "Norman Bates", cohort: :november}
-# ]
-
-
-
 def print_header
   # Print header and line at the top of the list.
-puts "The Students of Villians Academy\n----------------------------"
+  puts "The Students of Villians Academy"
+  puts "--------------------------------"
 end
 
 def print_list(items)
   # prints each name and cohort in student list array to new line.
-  items.each { |item|
-  puts("#{item[:name]} (#{item[:cohort]} cohort)")
+  items.each_with_index { |item, index|
+  #puts("#{index+1}: #{item[:name]} (#{item[:cohort]} cohort)")
+  output = "#{index+1}: #{item[:name]} (#{item[:cohort]} cohort)".to_s
+  puts output
 }
+  puts("--------------------------------")
 end
 
 def print_footer(items)
   # Prints footer text with array length.
-  print "Overall, we have #{items.length} great students\n"
+  output = "Overall, we have #{items.length} great students\n"
+  print output
 end
 
+# Capitalises the first letter of the students surnames, in case of names with
+# 'Mc' or 'Mac' it also capitalises the third and fourth letter, respectively.
+# Also removes capitalisation for words like the and of, except for the leading word
 def capitalise_letters(name)
   temp_arr = name.split(" ")
   return_arr = []
-  temp_arr.each { |word|
-    if word[0].downcase + word[1].downcase == "mc"
-      word = word.capitalize
-      word[2] = word[2].upcase
-      return_arr << word
-    elsif word[0].downcase + word[1].downcase + word[2].downcase == "mac"
-      word = word.capitalize
-      word[3] = word[3].upcase
-      return_arr << word
-    else
-      return_arr << word.capitalize
+  ignore_words = ["of", "the", "in", "from","in"]
+  temp_arr.each_with_index { |word, index|
+
+    word = word.capitalize
+    
+    if word[1] != nil
+      if word[0].downcase + word[1].downcase == "mc" && word[2] != nil
+        word[2] = word[2].upcase
+      end
     end
+    
+    if word[2] != nil
+      if word[0].downcase + word[1].downcase + word[2].downcase == "mac" && word[3] != nil
+        word[3] = word[3].upcase
+      end 
+    end
+    
+    ignore_words.each { |ignore|
+      if word.downcase == ignore && index != 0
+        word = word.downcase
+      end
+    }    
+    
+    return_arr << word
   }
   
   return return_arr.join(" ")
 end
 
+# check to see if the user has entered the month correctly,
+# loops until it receives accepted input, returns full month name.
+def check_month
+  months = "January,February,March,April,May,June,July,August,September,October,November,December".downcase.split(",")
+   while true
+     print "Please enter the cohort month: "
+     mon = gets.chomp.downcase
+     months.each { |month|
+       if month.include?(mon)
+         return month
+       end
+     }
+   end
+end
+
+# takes input from user and assigns cohort months, and creates list of students
 def input_students
   students = []
-  puts "Please enter the cohort month"
-  month = gets.chomp.downcase
+  
   puts "Please enter the names of the students"
   puts "Press enter twice to finish"
-  
   name = gets.chomp
   
-  #whilst input is not empty, loops to keep adding students to array
+  # whilst input is not empty, loops to keep adding students to array
   while !name.empty? do
+    # runs check month, assigns month to value.
+    month = check_month
+    puts("")
     students << {name: capitalise_letters(name), cohort: month.to_sym}
-    puts "Now we have #{students.length} students"
+    if students.length > 1
+      puts "Now we have #{students.length} students"
+    else 
+      puts "Now we have #{students.length} student"
+    end
+    
+    
+    puts "Press enter twice to finish"
+    print "Name: "
     name = gets.chomp
   end
   
   # returns filled list of students
   return students
+end
+
+# returns list of students from input cohort.
+def print_list_filtered(students, cohort)
+  print "Enter month to filter by: "
+  cohort_month = gets.chomp
+  students.map { |student| 
+  if student[:cohort] == cohort_month.downcase.to_sym
+    output = "#{student[:name]} (#{student[:cohort]} cohort)".to_s
+    puts output
+  end
+  }
+  
+  
 end
 
 
@@ -84,3 +126,5 @@ print_list(student_list)
 
 # runs print footer and prints footer text
 print_footer(student_list)
+
+#print_list_filtered(student_list)
