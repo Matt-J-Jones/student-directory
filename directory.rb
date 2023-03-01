@@ -110,14 +110,6 @@ def input_students
   # return students
 end
 
-def print_menu
-  # prints the menu options for the interactive menu
-  puts "1. Input the students"
-  puts "2. Show the students"
-  puts "3. Save the student list to students.csv"
-  puts "9. Exit"
-end
-
 def print_students
   # runs print_header and prints header text
   print_header
@@ -125,6 +117,15 @@ def print_students
   print_student_list
   # runs print footer and prints footer text
   print_footer
+end
+
+def print_menu
+  # prints the menu options for the interactive menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "3. Save the student list to students.csv"
+  puts "4. Load the student list from students.csv"
+  puts "9. Exit"
 end
 
 def option_select
@@ -137,6 +138,8 @@ def option_select
       print_students
     when "3"
       save_students_list
+    when "4"
+      load_students_list
     when "9"
       exit
     else
@@ -171,6 +174,17 @@ def save_students_list
   }
   
   #close the file
+  file.close
+end
+
+def load_students_list
+  file = File.open("students.csv", "r")
+  
+  file.readlines.each do |line|
+    name, cohort = line.chomp.split(',')
+    @student_list << {name: name, cohort: cohort.to_sym}
+  end
+  
   file.close
 end
 
