@@ -1,3 +1,4 @@
+require 'csv'
 @student_list = []
 
 def print_header
@@ -39,7 +40,7 @@ def capitalise_letters(name)
   temp_arr = name.split(" ")
   return_arr = []
   ignore_words = ["of", "the", "in", "from","in"]
-  temp_arr.each_with_index { |word, index|
+  temp_arr.each_with_index do |word, index|
 
     word = word.capitalize
     
@@ -62,7 +63,7 @@ def capitalise_letters(name)
     }    
     
     return_arr << word
-  }
+  end
   
   return return_arr.join(" ")
 end
@@ -70,7 +71,9 @@ end
 def check_month
   # check to see if the user has entered the month correctly,
   # loops until it receives accepted input, returns full month name.
-  months = "January,February,March,April,May,June,July,August,September,October,November,December".downcase.split(",")
+  months = ["january", "february", "march", "april", 
+            "may", "june", "july", "august", "september", 
+            "october", "november", "december"]
    while true
      print "Please enter the cohort month: "
      mon = STDIN.gets.chomp.downcase
@@ -87,27 +90,27 @@ def input_students
   puts "Please enter the names of the students"
   puts "Press enter twice to finish"
   name = STDIN.gets.chomp
-  #students = []
   # whilst input is not empty, loops to keep adding students to array
   while !name.empty? do
     # runs check month, assigns month to value.
-    month = check_month.to_sym
+    month = check_month
+    student_name = capitalise_letters(name)
     puts("")
-    @student_list << {name: capitalise_letters(name), cohort: month}
-
-    if @student_list.length > 1
-      puts "Now we have #{@student_list.length} students"
-    else 
-      puts "Now we have #{@student_list.length} student"
-    end
-    
+    push_to_students_list(student_name, month)
+    student_count
     puts "Press enter twice to finish"
     print "Name: "
     name = STDIN.gets.chomp
   end
-  
-  # returns filled list of students
-  # return students
+end
+
+def student_count
+  # counts the number of students on in the directory as they're being added
+  if @student_list.length > 1
+    puts "Now we have #{@student_list.length} students"
+  else 
+    puts "Now we have #{@student_list.length} student"
+  end
 end
 
 def print_students
@@ -117,6 +120,10 @@ def print_students
   print_student_list
   # runs print footer and prints footer text
   print_footer
+end
+
+def push_to_students_list(student_name, month)
+  @student_list << {name: student_name, cohort: month.to_sym}
 end
 
 def print_menu
@@ -148,48 +155,30 @@ def option_select
 end
 
 def interactive_menu
-  # opens menu, takes input from user, and executes.
   loop do
-  # 1. print the menu and ask what to do
+  # print the menu and ask what to do
   print_menu
-  # 2. read the input and save to variable
-  # 3. execute the users input
+  # read the input and save to variable, executes the user input
   option_select
-  # 4. repeat to step 1.
   end
 end
 
 def save_students_list
   # opens file to save student list as csv
-  file = File.open("students.csv", "w")
-  
-  #iterate over student list and add to file
-  @student_list.each { |student|
-    # convert hash data to string by first creating an array
-    # then joining the array, with a comma, to form a string.
-    
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
-  }
-  
-  #close the file
-  file.close
+  CSV.open("students.csv", "wb") do |csv|
+    #iterate over student list and add to file
+    @student_list.each { |student|
+      # save to file
+      csv << [student[:name], student[:cohort]]
+    }
+  end
+  puts("Save Sucessful! #{@student_list.length} records saved!")
 end
 
 def load_students_list(filename = "students.csv")
-  file = File.open(filename, "r")
-  
-  # reads each line of csv file, splits into array and
-  # creates a hash from it, converting string to symbol for month
-  # Pushes hash to @student_list.
-  
-  file.readlines.each do |line|
-    name, cohort = line.chomp.split(',')
-    @student_list << {name: name, cohort: cohort.to_sym}
-  end
-  
-  file.close
+  # reads each line of csv file, pushes to @student_list.
+  CSV.foreach(filename) { |line| push_to_students_list(line[0], line[1]) }
+  puts "Loaded #{@student_list.length} records from #{filename}..."
 end
 
 def try_load_students
@@ -199,7 +188,6 @@ def try_load_students
   return if filename.nil? 
   if File.exist?(filename) #if the file exists
     load_students_list(filename)
-    puts "Loaded #{@student_list.length} from #{filename}..."
   else
     puts "Sorry, #{filename} does not exist."
     exit
