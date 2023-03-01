@@ -114,6 +114,7 @@ def print_menu
   # prints the menu options for the interactive menu
   puts "1. Input the students"
   puts "2. Show the students"
+  puts "3. Save the student list to students.csv"
   puts "9. Exit"
 end
 
@@ -134,6 +135,8 @@ def option_select
       input_students
     when "2"
       print_students
+    when "3"
+      save_students_list
     when "9"
       exit
     else
@@ -151,6 +154,24 @@ def interactive_menu
   option_select
   # 4. repeat to step 1.
   end
+end
+
+def save_students_list
+  # opens file to save student list as csv
+  file = File.open("students.csv", "w")
+  
+  #iterate over student list and add to file
+  @student_list.each { |student|
+    # convert hash data to string by first creating an array
+    # then joining the array, with a comma, to form a string.
+    
+    student_data = [student[:name], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  }
+  
+  #close the file
+  file.close
 end
 
 interactive_menu
