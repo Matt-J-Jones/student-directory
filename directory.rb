@@ -73,7 +73,7 @@ def check_month
   months = "January,February,March,April,May,June,July,August,September,October,November,December".downcase.split(",")
    while true
      print "Please enter the cohort month: "
-     mon = gets.chomp.downcase
+     mon = STDIN.gets.chomp.downcase
      months.each { |month|
        if month.include?(mon)
          return month
@@ -86,7 +86,7 @@ def input_students
   # takes input from user and assigns cohort months, and creates list of students
   puts "Please enter the names of the students"
   puts "Press enter twice to finish"
-  name = gets.chomp
+  name = STDIN.gets.chomp
   #students = []
   # whilst input is not empty, loops to keep adding students to array
   while !name.empty? do
@@ -103,7 +103,7 @@ def input_students
     
     puts "Press enter twice to finish"
     print "Name: "
-    name = gets.chomp
+    name = STDIN.gets.chomp
   end
   
   # returns filled list of students
@@ -129,7 +129,7 @@ def print_menu
 end
 
 def option_select
-  selection = gets.chomp
+  selection = STDIN.gets.chomp
   case selection 
     when "1"
       # runs input_students to generate a list of srudents from the user
@@ -177,8 +177,12 @@ def save_students_list
   file.close
 end
 
-def load_students_list
-  file = File.open("students.csv", "r")
+def load_students_list(filename = "students.csv")
+  file = File.open(filename, "r")
+  
+  # reads each line of csv file, splits into array and
+  # creates a hash from it, converting string to symbol for month
+  # Pushes hash to @student_list.
   
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
@@ -187,5 +191,23 @@ def load_students_list
   
   file.close
 end
+
+def try_load_students
+  # load first argument from command line
+  filename = ARGV.first 
+  # leave method if filename is not given
+  return if filename.nil? 
+  if File.exist?(filename) #if the file exists
+    load_students_list(filename)
+    puts "Loaded #{@student_list.length} from #{filename}..."
+  else
+    puts "Sorry, #{filename} does not exist."
+    exit
+  end
+  
+  # Use "ruby directory.rb students.csv" to load on startup.
+end
+
+try_load_students
 
 interactive_menu
