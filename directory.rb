@@ -80,12 +80,10 @@ end
 
 # takes input from user and assigns cohort months, and creates list of students
 def input_students
-  students = []
-  
   puts "Please enter the names of the students"
   puts "Press enter twice to finish"
   name = gets.chomp
-  
+  students = []
   # whilst input is not empty, loops to keep adding students to array
   while !name.empty? do
     # runs check month, assigns month to value.
@@ -97,7 +95,6 @@ def input_students
     else 
       puts "Now we have #{students.length} student"
     end
-    
     
     puts "Press enter twice to finish"
     print "Name: "
@@ -122,17 +119,38 @@ def print_list_filtered(students, cohort)
   
 end
 
+# opens menu, takes input from user, and executes.
+def interactive_menu
+  student_list = []
+  loop do
+  # 1. print the menu and ask what to do
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+  # 2. read the input and save to variable
+  selection = gets.chomp
+  # 3. execute the users input
+    case selection 
+      when "1"
+        # runs input_students to generate a list of srudents from the user
+        student_list = input_students
+      when "2"
+        # runs print_header and prints header text
+        print_header
+        # runs print list method to print each item in the array that's input
+        print_list(student_list)
+        # runs print footer and prints footer text
+        print_footer(student_list)
+      when "9"
+        exit
+      else
+        puts "I don't know what you meant, please input again"
+    end
+  # 4. repeat to step 1.
+  end
+end
 
-# runs input_students to generate a list of srudents from the user
-student_list = input_students
+interactive_menu
 
-# runs print_header and prints header text
-print_header
-
-# runs print list method to print each item in the array that's input
-print_list(student_list)
-
-# runs print footer and prints footer text
-print_footer(student_list)
 
 #print_list_filtered(student_list)
