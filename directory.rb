@@ -5,19 +5,27 @@ def print_header
 end
 
 def print_list(items)
-  # prints each name and cohort in student list array to new line.
-  items.each_with_index { |item, index|
-  #puts("#{index+1}: #{item[:name]} (#{item[:cohort]} cohort)")
-  output = "#{index+1}: #{item[:name]} (#{item[:cohort]} cohort)".to_s
-  puts output
-}
-  puts("--------------------------------")
+  if items != []
+    # prints each name and cohort in student list array to new line.
+    items.each_with_index { |item, index|
+    #puts("#{index+1}: #{item[:name]} (#{item[:cohort]} cohort)")
+    output = "#{index+1}: #{item[:name]} (#{item[:cohort]} cohort)".to_s
+    puts output
+    }
+  else
+    puts "List is empty!".center(32)
+  end
+
+  
 end
 
 def print_footer(items)
   # Prints footer text with array length.
-  output = "Overall, we have #{items.length} great students\n"
-  print output
+  puts("--------------------------------")
+  if items.length !=0
+    output = "Overall, we have #{items.length} great students\n"
+    print output
+  end
 end
 
 # Capitalises the first letter of the students surnames, in case of names with
