@@ -6,7 +6,7 @@ def print_header
   puts "--------------------------------"
 end
 
-def print_list
+def print_student_list
   if @student_list != []
     # prints each name and cohort in student list array to new line.
 
@@ -121,9 +121,9 @@ def print_students
   # runs print_header and prints header text
   print_header
   # runs print list method to print each item in the array that's input
-  print_list()
+  print_student_list
   # runs print footer and prints footer text
-  print_footer()
+  print_footer
 end
 
 def option_select
